@@ -252,6 +252,7 @@ export default class RoomBuilder {
     */
     build() {
         if (!this.id) {
+
             throw new MissingRoomBuilderParam("Room id is missing in RoomBuilder Constructor\n Room(id <--, deploy, apiKey)");
         }
         if (!this.apiKey) {
