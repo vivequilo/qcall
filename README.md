@@ -1,5 +1,4 @@
 # QCall
-
 __Install QCall__
 With __npm__   <img src="https://static.npmjs.com/b0f1a8318363185cc2ea6a40ac23eeb2.png" width="20"/>
 ```javascript
