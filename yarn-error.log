@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/14.0.0/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js publish --tag v1.0.0
+  /usr/local/Cellar/node/14.0.0/bin/node /usr/local/Cellar/yarn/1.22.4/libexec/bin/yarn.js publish --scope@vivequilo --tag v1.0.1
 
 PATH: 
   /usr/local/opt/postgresql@11/bin:/usr/local/opt/mysql@5.6/bin:/usr/local/opt/mysql@5.6/bin:/usr/local/opt/mysql@5.7/bin:/usr/local/opt/mysql@5.6/bin:/usr/local/opt/mysql@5.6/bin:/usr/local/opt/mysql@5.6/bin:/usr/local/opt/mysql@5.6/bin:/usr/local/opt/mysql@5.6/bin:/usr/local/opt/mysql@5.6/bin:/usr/local/opt/mysql@5.7/bin:/usr/local/opt/mysql@5.7/bin:/usr/local/opt/mysql@5.7/bin:/usr/local/opt/openssl/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/opt/X11/bin:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/local/opt/postgresql@11/bin:/usr/local/opt/mysql@5.6/bin:/usr/local/opt/mysql@5.7/bin:/usr/local/opt/openssl/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/Users/tito/Library/Android/sdk/emulator:/Users/tito/Library/Android/sdk/tools:/Users/tito/Library/Android/sdk/tools/bin:/Users/tito/Library/Android/sdk/platform-tools:/Users/tito/Library/Android/sdk/emulator:/Users/tito/Library/Android/sdk/tools:/Users/tito/Library/Android/sdk/tools/bin:/Users/tito/Library/Android/sdk/platform-tools
@@ -28,8 +28,8 @@ Trace:
 
 npm manifest: 
   {
-    "name": "qcall",
-    "version": "1.0.0",
+    "name": "@vivequilo/qcall",
+    "version": "1.0.1",
     "description": "Call library from Quilo S.A.",
     "main": "index.js",
     "repository": "https://github.com/vivequilo/qcall",

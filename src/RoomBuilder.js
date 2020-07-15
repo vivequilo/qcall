@@ -68,6 +68,7 @@ export default class RoomBuilder {
         }
         this.onStreamAdded = () => { }
         this.onStreamDennied = () => { }
+        this.onLocalStream = () => { }
     }
 
     /**
@@ -112,6 +113,16 @@ export default class RoomBuilder {
      */
     setOnStreamDennied(onStreamDennied) {
         this.onStreamDennied = onStreamDennied
+        return this
+    }
+
+    /** Sets the callback when the stream is dennied
+ * @param {Function} onLocalStream The function parameter can recieve two optional parameters
+ * @param {object} data { id: 'peerId', metadata: 'metadata of the current user' } is a parameter of onLocalStream
+ * @param {Error} error Error instance  is a parameter of onLocalStream
+ */
+    setOnLocalStream(onLocalStream) {
+        this.onLocalStream = onLocalStream
         return this
     }
 
@@ -259,6 +270,6 @@ export default class RoomBuilder {
             throw new MissingRoomBuilderParam("Api Key is missing in RoomBuilder Constructor\n Room(id, deploy, apiKey <--)");
         }
         const api = new API(this.apiKey, this.deploy)
-        return new Room(this.id, this.peerId, this.metadata, this.onStreamAdded, this.onStreamDennied, this.withAudio, this.videoConstraints, api)
+        return new Room(this.id, this.peerId, this.metadata, this.onStreamAdded, this.onStreamDennied, this.withAudio, this.videoConstraints, this.onLocalStream, api)
     }
 }

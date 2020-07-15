@@ -7,7 +7,7 @@ export const PEER_PORT = 443
 export const PEER_PATH = '/myapp'
 
 export default class Room {
-    constructor(id, peerId = uuidv4(), metadata = {}, onStreamAdded, onStreamAddedFail, withAudio, videoConstraints, api) {
+    constructor(id, peerId = uuidv4(), metadata = {}, onStreamAdded, onStreamAddedFail, withAudio, videoConstraints, onLocalStream, api) {
         this.id = id
         this.peerId = peerId
         this.metadata = metadata
@@ -19,6 +19,7 @@ export default class Room {
         this.peer = null
         this.withAudio = withAudio
         this.videoConstraints = videoConstraints
+        this.onLocalStream = onLocalStream
         this.api = api
 
         window.onbeforeunload = () => {
@@ -30,9 +31,10 @@ export default class Room {
     connect(onSuccessFullConnection = () => { }, onError = () => { }) {
         var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         getUserMedia({ video: this.videoConstraints, audio: this.withAudio }, stream => {
+            this.onLocalStream(stream)
             this.api.registerParticipant(this, () => {
                 this.api.getParticipants(this, (response) => {
-                    console.log(response.data)
+
                     const participants = response.data.participants.filter(client => client.peer_id != this.peerId)
                     this.listOfClientsToConnect = participants.map(client => client.peer_id)
                     this.clients = participants.map(client => new Client(client.peer_id, client.metadata))
@@ -40,10 +42,10 @@ export default class Room {
                         this.peer = new Peer(this.peerId, { key: PEER_KEY, host: PEER_HOST, port: PEER_PORT, path: PEER_PATH })
                     }
                     this.peer.on('disconnected', () => {
-                        console.log('peer disconnected')
+
                     })
                     this.peer.on('close', () => {
-                        console.log('peer closed')
+
                     })
                     this.peer.on('open', (id) => {
                         onSuccessFullConnection(id)
@@ -86,10 +88,10 @@ export default class Room {
                         onError(err)
                     })
                 }, error => {
-                    console.log("error in list", error)
+
                 })
             }, error => {
-                console.log("error in register", error)
+
             })
         }, (err) => {
             this.onStreamAddedFail({ id: this.peerId, metadata: this.metadata }, err)

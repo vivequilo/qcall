@@ -1,4 +1,18 @@
 # QCall
+
+## Complete example
+```js
+//Example of video tag
+    <video
+      srcObject="VIDEO_STREAM"
+      id="myVideo"
+      height="720"
+      width="1280"
+      autoplay
+      controls
+    ></video>
+```
+
 __Install QCall__
 With __npm__   <img src="https://static.npmjs.com/b0f1a8318363185cc2ea6a40ac23eeb2.png" width="20"/>
 ```javascript
@@ -12,7 +26,16 @@ With __yarn__ <img src="https://yarnpkg.com/favicon-32x32.png?v=6143f50112ddba9f
 
 
 Builder class wich allows you to create a Room instance with the build pattern. By default this class has the current constraints:
-
+```js
+    /**
+     * Room Builder cconstruct
+     * @class
+     * @param {String} id The room id
+     * @param {String} deploy The scope provded to you by Quilo S.A.
+     * @param {String} apiKey The api key provded to you by Quilo S.A.
+     */
+constructor(id, deploy, apiKey = null)
+```
 - VideoConstraints:
 	- Height
 		- max: __VideoQualities.HD.height__ = 720px
@@ -32,8 +55,9 @@ Builder class wich allows you to create a Room instance with the build pattern. 
 Name | Parameters | Description
 --- | --- | ---
 setPeerId	| id: String | Sets the peerId manually. By default it is a uuid.
-setWithAudtio| withAudio: Boolean | Defines if the current stream will include audio.
+setWithAudio| withAudio: Boolean | Defines if the current stream will include audio.
 setMetadata|metadata: Object|Sets the metadata of the caller wich will be shared through the clients of the room.
+setOnLocalStream | (localCallerId, localStream) => Void : Function | Callback when the local stream is added. First parameter is the local peerId connected. Second parameter is the local [MediaStream](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) provided.
 setOnStreamAdded | (callerId, remoteStream) => Void : Function | Callback when a remote stream is added. First parameter is the remote peerId connected. Second parameter is the remote [MediaStream](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) provided.
 setOnStreamDennied | (data, error) => Void : Function | Callback when the user does not give permission to the current web page to get access to the camera and/or microphone. The __data__ (first parameter) value containts the current id and the metadata in an object instance, __error__ (second parameter) containts the error instance. This callback its main purpose is for to show a specific message if the user does not allow the permission.
 setMaxVideoQuality | qualityConstraints : object | Sets the video max quality. Can be from __VideoQualities__ constants or it can be a custom value in px like {width : 100px, height: 100px }
@@ -51,7 +75,7 @@ Basic Example
 ```js
 import { RoomBuilder } from "qcall";
 /* Creates an instance of Room Class **/
-const room = new RoomBuilder('roomId')
+const room = new RoomBuilder('roomId', 'deploy', 'apiKey')
         .setMetadata({ name: "Augusto Alonso" })
         .build()
 ```
@@ -60,7 +84,7 @@ Example defining custom video quility
 ```js
 import { RoomBuilder, VideoQualities } from "qcall";
 /* Creates an instance of Room Class **/
-const room = new RoomBuilder('roomId')
+const room = new RoomBuilder('roomId', 'deploy', 'apiKey')
         .setMetadata({ name: "Paquito Pedroza" })
         .setMaxVideoQuality(VideoQualities.FULL_HD)
         .setMinVideoQuality(VideoQualities.HD)
@@ -70,7 +94,7 @@ const room = new RoomBuilder('roomId')
 is by passing an object with the width and height dimensions in pixels
 **/
 const FourK = { width: 3840, height: 2160 }
-const room = new RoomBuilder('roomId')
+const room = new RoomBuilder('roomId', 'deploy', 'apiKey')
         .setMetadata({ name: "Paquito Pedroza" })
         .setMaxVideoQuality(FourK)
         .build()
@@ -81,7 +105,7 @@ Example defining custom frame rate
 ```js
 import { RoomBuilder, VideoQualities, FrameRates } from "qcall";
 /* Creates an instance of Room Class **/
-const room = new RoomBuilder('roomId')
+const room = new RoomBuilder('roomId', 'deploy', 'apiKey')
         .setMetadata({ name: "Paquito Pedroza" })
         .setMaxVideoQuality(VideoQualities.FULL_HD)
        	.setMinFrameRate(FrameRates.GOOD)
@@ -89,7 +113,7 @@ const room = new RoomBuilder('roomId')
         .setMaxFrameRate(FrameRates.MAX)
         .build()
 /* Another way is passing the raw frame rate value desired **/
-const room = new RoomBuilder('roomId')
+const room = new RoomBuilder('roomId', 'deploy', 'apiKey')
         .setMaxFrameRate(35)
         .build()
 ```
@@ -98,7 +122,7 @@ Want to stream without audio
 ```js
 import { RoomBuilder } from "qcall";
 /* Creates an instance of Room Class **/
-const room = new RoomBuilder('roomId')
+const room = new RoomBuilder('roomId', 'deploy', 'apiKey')
 		.setWithAudtio(false)       
         .build()
 ```
@@ -107,7 +131,7 @@ Setting a onStreamDennied callback for our __Room__ class
 ```js
 import { RoomBuilder } from "qcall";
 /* Creates an instance of Room Class **/
-const room = new RoomBuilder('roomId')
+const room = new RoomBuilder('roomId', 'deploy', 'apiKey')
 		.setMetadata({ name: 'Juice WRLD', profession: 'Musician'})
 		.setOnStreamDennied((data, error) => {
         //Function where you alert and show an alert that the user MUST give 
@@ -123,7 +147,7 @@ Want to specify custom peerId (each one must be unique by default an uuid is set
 ```js
 import { RoomBuilder } from "qcall";
 /* Creates an instance of Room Class **/
-const room = new RoomBuilder('roomId')
+const room = new RoomBuilder('roomId', 'deploy', 'apiKey')
 		.setPeerId(user.id)       
         .build()
 ```
