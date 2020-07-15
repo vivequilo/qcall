@@ -147,14 +147,6 @@ Name | Parameters | Description
 connect	| Does not have parameters | When this function is calles it connects the current cleint to the room and retrieves the list of clients wich where already connected to it. It handles the connection to each of the clients in the call.
 close| Does not  have parameters | Closes the connection with each one of the clients. Also disconnects the peer.
 
-```js
-import { RoomBuilder } from "qcall";
-/* Creates an instance of Room Class **/
-const room = new RoomBuilder('roomId')
-		.setPeerId(user.id)       
-        .build()
-
-```
 
 ## Client Class
 
