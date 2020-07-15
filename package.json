@@ -1,6 +1,6 @@
 {
   "name": "qcall",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Call library from Quilo S.A.",
   "main": "index.js",
   "repository": "https://github.com/vivequilo/qcall",
