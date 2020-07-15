@@ -9,7 +9,7 @@
 
 import { uuidv4 } from './Utils'
 import Room from './Room'
-import MissingApikey from './Exceptions'
+import { MissingApikey } from './Exceptions'
 import API from './API'
 /**
  * @constant VideoQualities
@@ -132,6 +132,7 @@ export default class RoomBuilder {
                 },
             }
         }
+        return this
     }
 
     /**
@@ -152,6 +153,7 @@ export default class RoomBuilder {
                 },
             }
         }
+        return this
     }
 
     /**
@@ -172,6 +174,7 @@ export default class RoomBuilder {
                 },
             }
         }
+        return this
     }
 
     /**
@@ -188,6 +191,7 @@ export default class RoomBuilder {
                 }
             }
         }
+        return this
     }
 
     /**
@@ -204,6 +208,7 @@ export default class RoomBuilder {
                 }
             }
         }
+        return this
     }
 
     /**
@@ -220,6 +225,7 @@ export default class RoomBuilder {
                 }
             }
         }
+        return this
     }
 
 
@@ -233,7 +239,10 @@ export default class RoomBuilder {
                 ...this.videoConstraints,
                 facingMode: fm
             }
+        } else {
+            throw new Invalid
         }
+        return this
     }
 
     /**
