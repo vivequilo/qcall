@@ -5,5 +5,9 @@
   "main": "index.js",
   "repository": "https://github.com/vivequilo/qcall",
   "author": "Quilo S.A.",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "peerjs": "^1.3.1"
+  }
 }
