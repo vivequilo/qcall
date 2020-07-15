@@ -9,7 +9,8 @@
 
 import { uuidv4 } from './Utils'
 import Room from './Room'
-import { MissingApikey } from './Exceptions'
+import InvalidRoomBuilderParam from './exceptions/InvalidRoomBuilderParam'
+import MissingRoomBuilderParam from './exceptions/MissingRoomBuilderParam'
 import API from './API'
 /**
  * @constant VideoQualities
@@ -240,7 +241,7 @@ export default class RoomBuilder {
                 facingMode: fm
             }
         } else {
-            throw new Invalid
+            throw new InvalidRoomBuilderParam("Invalid Facing mode value")
         }
         return this
     }
@@ -251,10 +252,10 @@ export default class RoomBuilder {
     */
     build() {
         if (!this.id) {
-            throw new MissingApikey("Room id is missing in RoomBuilder Constructor\n Room(id <--, deploy, apiKey)");
+            throw new MissingRoomBuilderParam("Room id is missing in RoomBuilder Constructor\n Room(id <--, deploy, apiKey)");
         }
         if (!this.apiKey) {
-            throw new MissingApikey("Api Key is missing in RoomBuilder Constructor\n Room(id, deploy, apiKey <--)");
+            throw new MissingRoomBuilderParam("Api Key is missing in RoomBuilder Constructor\n Room(id, deploy, apiKey <--)");
         }
         const api = new API(this.apiKey, this.deploy)
         return new Room(this.id, this.peerId, this.metadata, this.onStreamAdded, this.onStreamDennied, this.withAudio, this.videoConstraints, api)
