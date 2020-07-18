@@ -58,7 +58,8 @@ setPeerId	| id: String | Sets the peerId manually. By default it is a uuid.
 setWithAudio| withAudio: Boolean | Defines if the current stream will include audio.
 setMetadata|metadata: Object|Sets the metadata of the caller wich will be shared through the clients of the room.
 setOnLocalStream | (localCallerId, localStream) => Void : Function | Callback when the local stream is added. First parameter is the local peerId connected. Second parameter is the local [MediaStream](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) provided.
-setOnStreamAdded | (callerId, remoteStream) => Void : Function | Callback when a remote stream is added. First parameter is the remote peerId connected. Second parameter is the remote [MediaStream](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) provided.
+setOnStreamAdded | (caller, remoteStream) => Void : Function | Callback when a remote stream is added. First parameter is the remote caller Class instance connected. Second parameter is the remote [MediaStream](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) provided.
+setOnStreamRemoved | (callerId) => Void : Function | Callback when a remote stream is removed (When a caller disconnnects from the meeting). The parameter is the remote id of the caller disconnected.
 setOnStreamDennied | (data, error) => Void : Function | Callback when the user does not give permission to the current web page to get access to the camera and/or microphone. The __data__ (first parameter) value containts the current id and the metadata in an object instance, __error__ (second parameter) containts the error instance. This callback its main purpose is for to show a specific message if the user does not allow the permission.
 setMaxVideoQuality | qualityConstraints : object | Sets the video max quality. Can be from __VideoQualities__ constants or it can be a custom value in px like {width : 100px, height: 100px }
 setMinVideoQuality | qualityConstraints : object | Sets the video min quality. Can be from __VideoQualities__ constants or it can be a custom value in px like {width : 100px, height: 100px }
@@ -161,6 +162,9 @@ stream | [MediaStream](https://developer.mozilla.org/en-US/docs/Web/API/MediaStr
 videoStream (getter) | [MediaStream](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) | Stream only with video of the local client excludes the audio without affecting the original stream. If the stream has not been set yet returns null
 audioStream (getter) | [MediaStream](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream) | Stream only with audio of the local client excludes the audio without affecting the original stream. If the stream has not been set yet returns nullnt clients using the room.
 peer | [PeerJs](https://peerjs.com/) | Peer js instance
+isMuted | boolean | Tells if the mic is currently muted
+isHidden | boolean | Tells if the camera is currently hidden
+
 
 
 ### Functions
@@ -168,6 +172,10 @@ Name | Parameters | Description
 --- | --- | ---
 connect	| Does not have parameters | When this function is calles it connects the current cleint to the room and retrieves the list of clients wich where already connected to it. It handles the connection to each of the clients in the call.
 close| Does not  have parameters | Closes the connection with each one of the clients. Also disconnects the peer.
+toggleMute| Does not have parameters | Toggle the mic on or off
+setIsMuted| bool: Boolean | Sets to a specific value if mic is muted
+toggleCamera| Does not have parameters | Toggle the video on or off
+setIsHidden| bool: Boolean | Sets to a specific value if video is hidden
 
 
 ## Client Class
@@ -186,4 +194,7 @@ audioTracks (getter) | Array<[MediaStreamTrack](https://developer.mozilla.org/en
 peerId | String | The peer connection id of the remote caller
 clients | Array of Clients| Array that containts all the current clients using the room.
 peer | [PeerJs](https://peerjs.com/) | Peer js instance
+
+## Diagram of callbacks in Room Builder Class
+<img src="https://i.ibb.co/0JMHtC5/flow.png" width="400"/>
 

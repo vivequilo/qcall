@@ -69,6 +69,13 @@ export default class RoomBuilder {
         this.onStreamAdded = () => { }
         this.onStreamDennied = () => { }
         this.onLocalStream = () => { }
+        this.onStreamRemoved = () => { }
+        if (!this.id) {
+            throw new MissingRoomBuilderParam("Room id is missing in RoomBuilder Constructor\n Room(id <--, deploy, apiKey)");
+        }
+        if (!this.apiKey) {
+            throw new MissingRoomBuilderParam("Api Key is missing in RoomBuilder Constructor\n Room(id, deploy, apiKey <--)");
+        }
     }
 
     /**
@@ -83,7 +90,7 @@ export default class RoomBuilder {
      * Setter if the input will have audio
      * @param {Boolean} withAudio Has audio value
      */
-    setWithAudtio(withAudio) {
+    setWithAudio(withAudio) {
         this.withAudio = withAudio
         return this
     }
@@ -106,6 +113,16 @@ export default class RoomBuilder {
         this.onStreamAdded = onStreamAdded
         return this
     }
+
+    /**
+ * Sets the callback when a remote stream is removed from the call.
+ * @param {onStreamAdded} onStreamAdded The function parameter wich revieves one optional parameter
+ * @param {String} id The peer id of the caller is a parameter of onStreamRemoved
+ */
+    setOnStreamRemoved(onStreamRemoved) {
+        this.onStreamRemoved = onStreamRemoved
+        return this
+    }
     /** Sets the callback when the stream is dennied
      * @param {Function} onStreamDennied The function parameter can recieve two optional parameters
      * @param {object} data { id: 'peerId', metadata: 'metadata of the current user' } is a parameter of onStreamDennied
@@ -118,8 +135,7 @@ export default class RoomBuilder {
 
     /** Sets the callback when the stream is dennied
  * @param {Function} onLocalStream The function parameter can recieve two optional parameters
- * @param {object} data { id: 'peerId', metadata: 'metadata of the current user' } is a parameter of onLocalStream
- * @param {Error} error Error instance  is a parameter of onLocalStream
+ * @param {object} stream MediaStream of  the local caller
  */
     setOnLocalStream(onLocalStream) {
         this.onLocalStream = onLocalStream
@@ -135,11 +151,11 @@ export default class RoomBuilder {
             this.videoConstraints = {
                 ...this.videoConstraints,
                 width: {
-                    ... this.videoConstraints.width,
+                    ...this.videoConstraints.width,
                     max: qualityConstraints.width
                 },
                 height: {
-                    ... this.videoConstraints.height,
+                    ...this.videoConstraints.height,
                     max: qualityConstraints.height
                 },
             }
@@ -156,11 +172,11 @@ export default class RoomBuilder {
             this.videoConstraints = {
                 ...this.videoConstraints,
                 frameRate: {
-                    ... this.videoConstraints.width,
+                    ...this.videoConstraints.width,
                     min: qualityConstraints.width
                 },
                 height: {
-                    ... this.videoConstraints.height,
+                    ...this.videoConstraints.height,
                     min: qualityConstraints.height
                 },
             }
@@ -177,11 +193,11 @@ export default class RoomBuilder {
             this.videoConstraints = {
                 ...this.videoConstraints,
                 width: {
-                    ... this.videoConstraints.width,
+                    ...this.videoConstraints.width,
                     ideal: qualityConstraints.width
                 },
                 height: {
-                    ... this.videoConstraints.height,
+                    ...this.videoConstraints.height,
                     ideal: qualityConstraints.height
                 },
             }
@@ -198,7 +214,7 @@ export default class RoomBuilder {
             this.videoConstraints = {
                 ...this.videoConstraints,
                 frameRate: {
-                    ... this.videoConstraints.frameRate,
+                    ...this.videoConstraints.frameRate,
                     ideal: rate
                 }
             }
@@ -215,7 +231,7 @@ export default class RoomBuilder {
             this.videoConstraints = {
                 ...this.videoConstraints,
                 frameRate: {
-                    ... this.videoConstraints.frameRate,
+                    ...this.videoConstraints.frameRate,
                     max: rate
                 }
             }
@@ -232,7 +248,7 @@ export default class RoomBuilder {
             this.videoConstraints = {
                 ...this.videoConstraints,
                 frameRate: {
-                    ... this.videoConstraints.frameRate,
+                    ...this.videoConstraints.frameRate,
                     min: rate
                 }
             }
@@ -257,6 +273,11 @@ export default class RoomBuilder {
         return this
     }
 
+    createApi() {
+        return new API(this.apiKey, this.deploy)
+    }
+
+
     /**
     * Builds the Room instance
     *  @return {Room} Return Room class.
@@ -269,7 +290,18 @@ export default class RoomBuilder {
         if (!this.apiKey) {
             throw new MissingRoomBuilderParam("Api Key is missing in RoomBuilder Constructor\n Room(id, deploy, apiKey <--)");
         }
-        const api = new API(this.apiKey, this.deploy)
-        return new Room(this.id, this.peerId, this.metadata, this.onStreamAdded, this.onStreamDennied, this.withAudio, this.videoConstraints, this.onLocalStream, api)
+
+        return new Room({
+            id: this.id,
+            peerId: this.peerId,
+            metadata: this.metadata,
+            onStreamAdded: this.onStreamAdded,
+            onStreamDennied: this.onStreamDennied,
+            withAudio: this.withAudio,
+            videoConstraints: this.videoConstraints,
+            onLocalStream: this.onLocalStream,
+            onStreamRemoved: this.onStreamRemoved,
+            api: this.createApi()
+        })
     }
 }
